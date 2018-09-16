@@ -1,7 +1,7 @@
 package com.rpn.calculator.com.rpn.calculator.parser;
 
 import com.rpn.calculator.com.rpn.calculator.exception.CalculatorException;
-import com.rpn.calculator.com.rpn.calculator.service.Operator;
+import com.rpn.calculator.com.rpn.calculator.data.Operator;
 
 /**
  * Class responsible for parsing the input parameter

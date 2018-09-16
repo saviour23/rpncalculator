@@ -9,6 +9,9 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
+/**
+ * Rpn Calculator main class
+ */
 public class RpnCalculator {
 
     private static Boolean keepRunning;
@@ -19,7 +22,6 @@ public class RpnCalculator {
     }
 
     private void startCalculator() throws CalculatorException {
-        Calculator calculator = Calculator.getInstance();
         BufferedReader commandLineInput = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Please enter your expression or 'Exit' to quit: ");
         keepRunning = true;

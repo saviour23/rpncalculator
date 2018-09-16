@@ -2,6 +2,8 @@ package com.rpn.calculator.com.rpn.calculator.service;
 
 
 import com.google.common.base.Strings;
+import com.rpn.calculator.com.rpn.calculator.data.Operation;
+import com.rpn.calculator.com.rpn.calculator.data.Operator;
 import com.rpn.calculator.com.rpn.calculator.parser.InputParser;
 import com.rpn.calculator.com.rpn.calculator.exception.CalculatorException;
 
@@ -22,7 +24,7 @@ public class Calculator implements Serializable {
     // stack for storing all successful performed operations.
     private final Stack<Operation> operationPerformedStack = new Stack<>();
     private AtomicInteger indexCounter;
-    private static volatile Calculator calculatorInstance = null;
+    private static volatile Calculator calculatorInstance;
 
     /**
      * safe guarding calculator instance from reflection.
@@ -42,12 +44,12 @@ public class Calculator implements Serializable {
      */
     public static Calculator getInstance() {
 
-        if (null == calculatorInstance) {
+        if (calculatorInstance == null) {
 
             synchronized (Calculator.class) {
 
-                if (null == calculatorInstance) {
-                    return new Calculator();
+                if (calculatorInstance == null) {
+                    calculatorInstance = new Calculator();
                 }
             }
         }
@@ -154,12 +156,12 @@ public class Calculator implements Serializable {
 
         //Checking if last operation was performed on 2 elements then adding back both elements
 
-        if (lastOperation.operator.getOperandsNumber() > 1) {
-            valuesStack.push(lastOperation.secondOperand);
-            valuesStack.push(lastOperation.firstOperand);
+        if (lastOperation.getOperator().getOperandsNumber() > 1) {
+            valuesStack.push(lastOperation.getSecondOperand());
+            valuesStack.push(lastOperation.getFirstOperand());
         } else {
             //if one element was there in last operation then adding back one element.
-            valuesStack.push(lastOperation.firstOperand);
+            valuesStack.push(lastOperation.getFirstOperand());
         }
     }
 

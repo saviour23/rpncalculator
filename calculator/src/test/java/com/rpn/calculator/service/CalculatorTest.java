@@ -6,6 +6,7 @@ import com.rpn.calculator.com.rpn.calculator.service.Calculator;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 
+import java.lang.reflect.Constructor;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -24,11 +25,44 @@ public class CalculatorTest {
 
     @After
     public void tearDown() {
-        calculator = null;
+        //clearing values from calculator stack
+        try {
+            calculator.eval("clear");
+        } catch (CalculatorException e) {
+            //not required as if stack is empty as we try to clear it, it throws exception
+        }
     }
 
     @Rule
     public ExpectedException exception = ExpectedException.none();
+
+    @Test
+    public void testSingleton() {
+        Calculator instance1 = Calculator.getInstance();
+        Calculator instance2 = Calculator.getInstance();
+        assertEquals(instance1.hashCode(), instance2.hashCode());
+
+    }
+
+
+    @Test
+    public void testSingleTonReflection() {
+
+
+        Calculator instance1 = Calculator.getInstance();
+
+        //Create 2nd instance using Java Reflection API.
+        Calculator instance2 = null;
+        try {
+            Class<Calculator> clazz = Calculator.class;
+            Constructor<Calculator> cons = clazz.getDeclaredConstructor();
+            cons.setAccessible(true);
+            instance2 = cons.newInstance();
+            fail(); // if this statement is executed that means test is failed for singleton
+        } catch (Exception e) {
+            // if exception is thrown then this test is passed
+        }
+    }
 
     @Test
     public void testOperators() {
@@ -48,10 +82,10 @@ public class CalculatorTest {
 
         calculator.eval("5 2 -");
         assertEquals(1, calculator.getSize());
-        assertEquals(new BigDecimal(3).setScale(15,RoundingMode.HALF_UP), calculator.getValueFromIndex(0));
+        assertEquals(new BigDecimal(3).setScale(15, RoundingMode.HALF_UP), calculator.getValueFromIndex(0));
         calculator.eval("3 -");
         assertEquals(1, calculator.getSize());
-        assertEquals(BigDecimal.ZERO.setScale(15,RoundingMode.HALF_UP), calculator.getValueFromIndex(0));
+        assertEquals(BigDecimal.ZERO.setScale(15, RoundingMode.HALF_UP), calculator.getValueFromIndex(0));
     }
 
     @Test
@@ -63,7 +97,7 @@ public class CalculatorTest {
             assertEquals(4, calculator.getSize());
             calculator.eval("clear 3 4 -");
             assertEquals(1, calculator.getSize());
-            assertEquals(new BigDecimal(-1).setScale(15,RoundingMode.HALF_UP), calculator.getValueFromIndex(0));
+            assertEquals(new BigDecimal(-1).setScale(15, RoundingMode.HALF_UP), calculator.getValueFromIndex(0));
         } catch (Exception e) {
             fail();
         }
@@ -77,7 +111,7 @@ public class CalculatorTest {
             calculator.eval("1 2 3 4 5");
             calculator.eval("* * * *");
             assertEquals(1, calculator.getSize());
-            assertEquals(new BigDecimal(120).setScale(15,RoundingMode.HALF_UP), calculator.getValueFromIndex(0));
+            assertEquals(new BigDecimal(120).setScale(15, RoundingMode.HALF_UP), calculator.getValueFromIndex(0));
 
         } catch (Exception e) {
             fail();
@@ -90,13 +124,13 @@ public class CalculatorTest {
         try {
             calculator.eval("7 12 2 /");
             assertEquals(new BigDecimal(7), calculator.getValueFromIndex(0));
-            assertEquals(new BigDecimal(6).setScale(15,RoundingMode.HALF_UP), calculator.getValueFromIndex(1));
+            assertEquals(new BigDecimal(6).setScale(15, RoundingMode.HALF_UP), calculator.getValueFromIndex(1));
             calculator.eval("*");
             assertEquals(1, calculator.getSize());
-            assertEquals(new BigDecimal(42).setScale(15,RoundingMode.HALF_UP), calculator.getValueFromIndex(0));
+            assertEquals(new BigDecimal(42).setScale(15, RoundingMode.HALF_UP), calculator.getValueFromIndex(0));
             calculator.eval("4 /");
             assertEquals(1, calculator.getSize());
-            assertEquals(new BigDecimal(10.5).setScale(15,RoundingMode.HALF_UP), calculator.getValueFromIndex(0));
+            assertEquals(new BigDecimal(10.5).setScale(15, RoundingMode.HALF_UP), calculator.getValueFromIndex(0));
         } catch (Exception e) {
             fail();
         }
@@ -109,7 +143,7 @@ public class CalculatorTest {
             calculator.eval("2 sqrt");
             calculator.eval("clear 9 sqrt");
             assertEquals(1, calculator.getSize());
-            assertEquals(new BigDecimal(3).setScale(15,RoundingMode.HALF_UP), calculator.getValueFromIndex(0));
+            assertEquals(new BigDecimal(3).setScale(15, RoundingMode.HALF_UP), calculator.getValueFromIndex(0));
         } catch (Exception e) {
 
         }
@@ -123,7 +157,7 @@ public class CalculatorTest {
             assertEquals("operator * (position: 15): insufficient parameters", e.getMessage());
         }
         assertEquals(1, calculator.getSize());
-        assertEquals(new BigDecimal(11).setScale(15,RoundingMode.HALF_UP), calculator.getValueFromIndex(0));
+        assertEquals(new BigDecimal(11).setScale(15, RoundingMode.HALF_UP), calculator.getValueFromIndex(0));
     }
 
     @Test
@@ -134,17 +168,17 @@ public class CalculatorTest {
             assertEquals(4, calculator.getSize());
             calculator.eval("undo undo *");
             assertEquals(1, calculator.getSize());
-            assertEquals(new BigDecimal(20).setScale(15,RoundingMode.HALF_UP), calculator.getValueFromIndex(0));
+            assertEquals(new BigDecimal(20).setScale(15, RoundingMode.HALF_UP), calculator.getValueFromIndex(0));
             calculator.eval("5 *");
             assertEquals(1, calculator.getSize());
-            assertEquals(new BigDecimal(100).setScale(15,RoundingMode.HALF_UP), calculator.getValueFromIndex(0));
+            assertEquals(new BigDecimal(100).setScale(15, RoundingMode.HALF_UP), calculator.getValueFromIndex(0));
             calculator.eval("undo");
             assertEquals(2, calculator.getSize());
-            assertEquals(new BigDecimal(20).setScale(15,RoundingMode.HALF_UP), calculator.getValueFromIndex(0));
+            assertEquals(new BigDecimal(20).setScale(15, RoundingMode.HALF_UP), calculator.getValueFromIndex(0));
             assertEquals(new BigDecimal(5), calculator.getValueFromIndex(1));
             calculator.eval("+ undo - undo / undo * undo sqrt undo pow undo");
             assertEquals(2, calculator.getSize());
-            assertEquals(new BigDecimal(20).setScale(15,RoundingMode.HALF_UP), calculator.getValueFromIndex(0));
+            assertEquals(new BigDecimal(20).setScale(15, RoundingMode.HALF_UP), calculator.getValueFromIndex(0));
             assertEquals(new BigDecimal(5), calculator.getValueFromIndex(1));
         } catch (Exception e) {
             fail();

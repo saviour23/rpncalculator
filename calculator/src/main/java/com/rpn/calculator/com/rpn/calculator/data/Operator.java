@@ -1,4 +1,4 @@
-package com.rpn.calculator.com.rpn.calculator.service;
+package com.rpn.calculator.com.rpn.calculator.data;
 
 import com.rpn.calculator.com.rpn.calculator.exception.CalculatorException;
 
@@ -6,9 +6,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
-
-import static java.lang.Math.pow;
-import static java.lang.Math.sqrt;
 
 
 /**
@@ -93,11 +90,6 @@ public enum Operator {
 
     public int getOperandsNumber() {
         return operandsNumber;
-    }
-
-    @Override
-    public String toString() {
-        return symbol;
     }
 
     public static Operator getEnumFromString(String value) {

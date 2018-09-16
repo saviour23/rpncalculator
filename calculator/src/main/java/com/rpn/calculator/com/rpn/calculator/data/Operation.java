@@ -1,4 +1,4 @@
-package com.rpn.calculator.com.rpn.calculator.service;
+package com.rpn.calculator.com.rpn.calculator.data;
 
 import java.math.BigDecimal;
 
@@ -7,12 +7,13 @@ import java.math.BigDecimal;
  */
 public class Operation {
     // to maintain the operator used
-    Operator operator;
+    private Operator operator;
     //operands used in calculator action
-    BigDecimal firstOperand, secondOperand;
+    private BigDecimal firstOperand, secondOperand;
 
     /**
      * constructor used when operation is performed on only one value like sqrt, pow
+     *
      * @param operator
      * @param firstOperand
      */
@@ -24,12 +25,27 @@ public class Operation {
 
     /**
      * constructor used when operation is performed on two value like + . -, * etc
+     *
      * @param operator
      * @param firstOperand
      */
     public Operation(Operator operator, BigDecimal firstOperand, BigDecimal secondOperand) {
         this(operator, firstOperand);
         this.secondOperand = secondOperand;
+    }
+
+    public Operator getOperator() {
+        return operator;
+    }
+
+
+    public BigDecimal getFirstOperand() {
+        return firstOperand;
+    }
+
+
+    public BigDecimal getSecondOperand() {
+        return secondOperand;
     }
 
 }

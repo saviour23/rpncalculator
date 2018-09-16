@@ -1,7 +1,7 @@
 package com.rpn.calculator.service;
 
 import com.rpn.calculator.com.rpn.calculator.exception.CalculatorException;
-import com.rpn.calculator.com.rpn.calculator.service.Operator;
+import com.rpn.calculator.com.rpn.calculator.data.Operator;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -10,8 +10,6 @@ import org.junit.rules.ExpectedException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import static java.lang.Math.pow;
-import static java.lang.Math.sqrt;
 import static org.junit.Assert.assertEquals;
 
 public class OperatorTest {
