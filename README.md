@@ -23,3 +23,6 @@ previo us two operations.
 12. All numbers should be formatted as plain decimal strings (ie. no engineering formatting).
 13. If an operator cannot find a sufficient number of parameters on the stack, a warning is displayed: operator <operator> (position: <pos>): insufficient parameters
 14. After displaying the warning, all further processing of the string terminates and the current state of the stack is displayed.
+  
+  ##How to Run
+Build the project with command **mvn clean install** and start the application by running main class i.e. RpnCalculator.java
