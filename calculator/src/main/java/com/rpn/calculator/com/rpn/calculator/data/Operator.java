@@ -14,7 +14,7 @@ import java.util.Map;
 public enum Operator {
 
     ADDITION("+", 2) {
-        public BigDecimal calculate(BigDecimal firstOperand, BigDecimal secondOperand) throws CalculatorException {
+        public BigDecimal calculate(BigDecimal firstOperand, BigDecimal secondOperand) {
             return secondOperand.add(firstOperand).setScale(15, RoundingMode.HALF_UP);
         }
     },
@@ -36,13 +36,14 @@ public enum Operator {
             if (firstOperand.equals(BigDecimal.ZERO)) {
                 throw new CalculatorException("Cannot divide by 0.");
             }
-            return secondOperand.divide(firstOperand).setScale(15, RoundingMode.HALF_UP);
+            return secondOperand.divide(firstOperand,15,RoundingMode.HALF_UP);
         }
     },
 
     SQUAREROOT("sqrt", 1) {
         public BigDecimal calculate(BigDecimal firstOperand, BigDecimal secondOperand) {
-            return Operator.sqrtBigDecimal(firstOperand, new BigDecimal(1), new BigDecimal(1).divide(SQRT_PRE)).setScale(15,RoundingMode.HALF_UP);
+
+            return Operator.sqrt(firstOperand);
         }
     },
 
@@ -99,23 +100,9 @@ public enum Operator {
     private static final BigDecimal SQRT_DIG = new BigDecimal(50);
     private static final BigDecimal SQRT_PRE = new BigDecimal(10).pow(SQRT_DIG.intValue());
 
-    /**
-     * method used to compute the square root of a BigDecimal.
-     * "Newton–Raphson method"
-     */
-    private static BigDecimal sqrtBigDecimal(BigDecimal c, BigDecimal xn, BigDecimal precision) {
-        BigDecimal fx = xn.pow(2).add(c.negate());
-        BigDecimal fpx = xn.multiply(new BigDecimal(2));
-        BigDecimal xn1 = fx.divide(fpx, 2 * SQRT_DIG.intValue(), RoundingMode.HALF_DOWN);
-        xn1 = xn.add(xn1.negate());
-        BigDecimal currentSquare = xn1.pow(2);
-        BigDecimal currentPrecision = currentSquare.subtract(c);
-        currentPrecision = currentPrecision.abs();
-        if (currentPrecision.compareTo(precision) <= -1) {
-            return xn1;
-        }
-        return sqrtBigDecimal(c, xn1, precision);
+
+    public static BigDecimal sqrt(BigDecimal value) {
+        BigDecimal x = new BigDecimal(Math.sqrt(value.doubleValue()));
+        return x.setScale(15, RoundingMode.HALF_UP);
     }
-
-
 }

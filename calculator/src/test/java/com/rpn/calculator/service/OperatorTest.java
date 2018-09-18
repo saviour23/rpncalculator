@@ -61,8 +61,13 @@ public class OperatorTest {
     }
 
     @Test
-    public void testCalculateDevision() throws CalculatorException {
+    public void testCalculateDivision() throws CalculatorException {
         assertEquals(secondOperand.divide(firstOperand).setScale(15, RoundingMode.HALF_UP), Operator.DIVISION.calculate(firstOperand, secondOperand));
+    }
+
+    @Test
+    public void testCalculateDivisionWithPrecision() throws CalculatorException {
+        assertEquals(new BigDecimal("0.333333333333333"), Operator.DIVISION.calculate(new BigDecimal(3), new BigDecimal(1)));
     }
 
     @Test
@@ -73,7 +78,12 @@ public class OperatorTest {
 
     @Test
     public void testCalculateSquareroot() throws CalculatorException {
-        assertEquals("14.142135623730950", Operator.SQUAREROOT.calculate(secondOperand, null).toString());
+        assertEquals("14.142135623730951", Operator.SQUAREROOT.calculate(secondOperand, null).toString());
+    }
+
+    @Test
+    public void testCalculateSquarerootWithPrecision() throws CalculatorException {
+        assertEquals("1.732050807568877", Operator.SQUAREROOT.calculate(new BigDecimal(3), null).toString());
     }
 
 
